@@ -6,10 +6,10 @@ type Message = {
 };
 
 function formatContent(text: string): string {
-  // Convert both *single* and **double** asterisks to <strong>
+  // **bold** first, then *italic*
   return text
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<strong>$1</strong>");
+    .replace(/\*(.+?)\*/g, "<em>$1</em>");
 }
 
 export default function Home() {
@@ -151,8 +151,11 @@ export default function Home() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }
         }
+        .bubble em {
+          font-style: italic;
+        }
         .bubble strong {
-          color: inherit;
+          font-weight: bold;
         }
       `}</style>
 

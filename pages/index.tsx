@@ -6,13 +6,11 @@ type Message = {
 };
 
 function formatContent(text: string): string {
-  // Remove backslashes that escape asterisks (common AI mistake)
+  // Remove backslashes that escape asterisks (defensive)
   let clean = text.replace(/\\\*/g, "*");
 
-  // Convert **bold** and *italic* safely, even across newlines
-  // Double first to avoid confusion with single
+  // Convert **bold** and *italic* safely
   clean = clean.replace(/\*\*(.+?)\*\*/gs, "<strong>$1</strong>");
-  // Single italic (note the 's' flag allows dot to match newlines)
   clean = clean.replace(/\*(.+?)\*/gs, "<em>$1</em>");
 
   return clean;

@@ -5,6 +5,11 @@ type Message = {
   content: string;
 };
 
+// simple converter for **bold** → <strong>bold</strong>
+function formatContent(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -144,6 +149,9 @@ export default function Home() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }
         }
+        .bubble strong {
+          color: inherit;
+        }
       `}</style>
 
       <div className="chat-container">
@@ -155,7 +163,10 @@ export default function Home() {
         <div className="messages">
           {messages.map((msg, i) => (
             <div key={i} className={`msg ${msg.role}`}>
-              <div className="bubble">{msg.content}</div>
+              <div
+                className="bubble"
+                dangerouslySetInnerHTML={{ __html: formatContent(msg.content) }}
+              />
             </div>
           ))}
           {loading && (

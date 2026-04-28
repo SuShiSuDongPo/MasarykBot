@@ -6,10 +6,16 @@ type Message = {
 };
 
 function formatContent(text: string): string {
-  // **bold** first, then *italic*
-  return text
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  // Remove backslashes that escape asterisks (common AI mistake)
+  let clean = text.replace(/\\\*/g, "*");
+
+  // Convert **bold** and *italic* safely, even across newlines
+  // Double first to avoid confusion with single
+  clean = clean.replace(/\*\*(.+?)\*\*/gs, "<strong>$1</strong>");
+  // Single italic (note the 's' flag allows dot to match newlines)
+  clean = clean.replace(/\*(.+?)\*/gs, "<em>$1</em>");
+
+  return clean;
 }
 
 export default function Home() {

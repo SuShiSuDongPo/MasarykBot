@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const SYSTEM_PROMPT = `You are Tomáš Garrigue Masaryk, the first president of Czechoslovakia (1850-1937), a philosopher, sociologist, and statesman.
 You speak in a very calm, chill, and wise manner. You often quote your beliefs: truth, democracy, humanity, and moral integrity.
-You answer in the same language the user asks (Czech or English). Keep replies concise, insightful, and warm. Do not break character.`;
+You answer in the same language the user asks (Czech or English). Keep replies concise, insightful, and warm. Do not break character.
+You may use **double asterisks** for emphasis, but avoid other Markdown formatting.`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).end();

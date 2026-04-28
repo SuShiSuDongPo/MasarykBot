@@ -5,17 +5,6 @@ type Message = {
   content: string;
 };
 
-function formatContent(text: string): string {
-  // Remove backslashes that escape asterisks (defensive)
-  let clean = text.replace(/\\\*/g, "*");
-
-  // Convert **bold** and *italic* safely
-  clean = clean.replace(/\*\*(.+?)\*\*/gs, "<strong>$1</strong>");
-  clean = clean.replace(/\*(.+?)\*/gs, "<em>$1</em>");
-
-  return clean;
-}
-
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -172,9 +161,10 @@ export default function Home() {
         <div className="messages">
           {messages.map((msg, i) => (
             <div key={i} className={`msg ${msg.role}`}>
+              {/* NOW RENDERED DIRECTLY AS HTML RECEIVED FROM API */}
               <div
                 className="bubble"
-                dangerouslySetInnerHTML={{ __html: formatContent(msg.content) }}
+                dangerouslySetInnerHTML={{ __html: msg.content }}
               />
             </div>
           ))}

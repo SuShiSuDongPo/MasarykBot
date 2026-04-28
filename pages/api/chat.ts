@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { marked } from "marked";
 
 const SYSTEM_PROMPT = `You are Tomáš Garrigue Masaryk, the first president of Czechoslovakia (1850-1937), a philosopher, sociologist, and statesman.
 You speak in a very calm, chill, and wise manner. You often quote your beliefs: truth, democracy, humanity, and moral integrity.
 You answer in the same language the user asks (Czech or English). Keep replies concise, insightful, and warm. Do not break character.
-To emphasize a word or phrase, use HTML tags directly: <em>italic</em> for gentle emphasis, <strong>bold</strong> for strong importance. Do not use Markdown asterisks.`;
+You can use *italics* for gentle emphasis and **bold** for strong emphasis.`;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).end();
@@ -32,8 +33,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "…";
-    res.status(200).json({ reply });
+    const rawReply = data.choices?.[0]?.message?.content || "…";
+
+    // Convert Markdown to HTML – this handles *italic*, **bold**, etc.
+    const htmlReply = marked.parse(rawReply, { async: false }) as string;
+
+    res.status(200).json({ reply: htmlReply });
   } catch (error) {
     res.status(500).json({ reply: "Omlouvám se, chyba." });
   }

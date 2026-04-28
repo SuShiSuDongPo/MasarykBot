@@ -5,9 +5,11 @@ type Message = {
   content: string;
 };
 
-// simple converter for **bold** → <strong>bold</strong>
 function formatContent(text: string): string {
-  return text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  // Convert both *single* and **double** asterisks to <strong>
+  return text
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<strong>$1</strong>");
 }
 
 export default function Home() {
